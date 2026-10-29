@@ -70,16 +70,15 @@ The test suite covers source-backed drafting and review checks. Gmail draft crea
 
 GitHub Actions runs lint, tests and build on pushes and pull requests. Use the [draft review guide](docs/EVALUATION.md) for real lead feedback before claiming that the copy is effective.
 
-## Publish the code to GitHub
-
-This checkout has local Git commits but no remote repository yet. Create an empty repository named `outreachpilot` under your GitHub account, then from this project folder run:
+## Get the source
 
 ```bash
-git remote add origin https://github.com/abhi-yadv/outreachpilot.git
-git push -u origin main
+git clone https://github.com/abhi-yadv/outreachpilot.git
+cd outreachpilot
+npm ci
 ```
 
-Before the push, run `git status` and review `git ls-files`. The ignore rules exclude `.env`, `.local-data/`, installed packages and build output. Keep your actual CV, private backups and HR addresses outside the repository. Choose a license separately before inviting others to reuse the code.
+The ignore rules exclude `.env`, `.local-data/`, installed packages and build output. Keep actual CVs, private backups and HR addresses outside the repository. A live Gmail OAuth test is still required before claiming the complete integration has been verified. No reuse license has been selected yet.
 
 ## Structure
 

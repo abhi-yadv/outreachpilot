@@ -41,10 +41,10 @@ Test 20–30 permission-cleared or synthetic leads. For each draft, manually sco
 
 ## Local release status
 
-Lead input, separate company and optional job-page research, open versus listed-role drafting, manual source and posting review, writing checks, required PDF attachment, Gmail draft API integration, local backup/restore, and repeat-request protection are implemented. A real Outcom.AI lead was researched and its local draft reviewed; that test exposed awkward copied source wording, which was corrected in the template. A live Gmail draft remains untested because no OAuth client is configured.
+Lead input, separate company and optional job-page research, open versus listed-role drafting, manual source and posting review, writing checks, required PDF attachment, Gmail draft API integration, local backup/restore, and repeat-request protection are implemented. A real lead was researched and its local draft reviewed; that test exposed awkward copied source wording, which was corrected in the template. On October 29, 2026, the live OAuth flow completed for the intended test account. The saved Gmail draft was opened and its recipient, text and PDF attachment verified. It remained unsent.
 
 ## Next milestones
 
-1. Run the full OAuth flow with the user's test account and verify a Gmail draft with recipient, subject, body and CV attachment.
+1. Repeat the live flow after reconnecting and expand the real-lead review set.
 2. Improve copy quality using a small reviewed example set and exact feedback from real drafts.
 3. For any public deployment, replace local storage with authenticated per-user persistence and strengthen URL fetching, OAuth token storage and rate limiting. This is outside the local release.

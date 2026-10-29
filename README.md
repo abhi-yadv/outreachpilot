@@ -66,12 +66,12 @@ npm test
 npm run build
 ```
 
-GitHub Actions runs these on pushes and pull requests. Tests cover source matching, writing checks, backup validation, email MIME construction and repeated draft requests. A live Gmail OAuth test is still pending. The [draft review guide](docs/EVALUATION.md) tracks copy quality separately from code tests.
+GitHub Actions runs these on pushes and pull requests. Tests cover source matching, writing checks, backup validation, email MIME construction and repeated draft requests. The live OAuth and Gmail draft flow was verified on October 29, 2026, including the recipient, message and attached PDF. The [draft review guide](docs/EVALUATION.md) tracks copy quality separately from code tests.
 
 ## Current limits
 
 This version runs locally for one user. Page extraction can miss content, and matching text against a saved excerpt does not independently prove a claim. The draft template still needs editing for natural phrasing.
 
-Clearing browser storage removes the workspace, so export backups from **Candidate profile**. An interrupted Gmail request may need a manual check before retrying. Restarting the server disconnects Gmail.
+Clearing browser storage removes the workspace, so export backups from **Candidate profile**. An interrupted Gmail request may need a manual check before retrying. Restarting the server disconnects Gmail. Later edits made directly in Gmail are not synced back to the local copy.
 
 Keep `.env`, CVs, contact lists and private backups out of Git. Public deployment needs user authentication, durable storage and further OAuth and URL-fetching work. No reuse license has been selected yet.

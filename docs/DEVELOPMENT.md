@@ -26,4 +26,4 @@ The local draft index fingerprints the account and request content to reuse an i
 
 ## Next changes
 
-Complete the live OAuth test first. Then review copy quality across more leads, improve job-requirement extraction and split `App.tsx` as the screens grow. Multi-user hosting needs a separate plan for authentication, persistence and token storage.
+The first live OAuth and attached-draft test passed on October 29, 2026. Next, review copy quality across more leads, improve job-requirement extraction and split `App.tsx` as the screens grow. Multi-user hosting needs a separate plan for authentication, persistence and token storage.

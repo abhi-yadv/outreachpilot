@@ -24,3 +24,11 @@ Also record: total word count, number of edits before approval, whether the chec
 | test-01 |  |  |  |  |  |  |  |  |  |
 
 After 20–30 reviews, revise the template only for repeated, specific problems. Keep examples that caused the revision as synthetic fixtures in tests. Record the date, result and remaining limitations in this document without publishing real contact details.
+
+## Live workflow check — October 29, 2026
+
+One real company lead was researched from its official website and job listing. The initial template pasted a source fragment awkwardly; the wording was revised and the email was manually reviewed.
+
+The OAuth connection completed for the intended test Gmail account. An approved draft with a PDF CV was saved through the app and opened in Gmail. Recipient, subject, message and attachment were checked there. The subject was shortened directly in Gmail and the existing draft was saved and reopened to confirm persistence. No email was sent.
+
+This verifies one working local workflow, not copy quality across a broad lead set or inbox placement. Manual Gmail edits do not update the local workspace copy.

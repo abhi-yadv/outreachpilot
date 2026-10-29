@@ -12,8 +12,9 @@ As a student seeking a technical internship, I want to enter a company URL and H
 
 | Area | Requirement | Acceptance |
 | --- | --- | --- |
-| Lead | Company name, role, URL, HR email, optional name | No email address is guessed; invalid addresses are flagged |
-| Research | Read one public URL into an excerpt and show its source | User can edit the excerpt and fact; manual source review expires after 30 days |
+| Lead | Company name, main URL, HR email, optional name | No email address is guessed; invalid addresses are flagged |
+| Opportunity | Listed role or open internship inquiry | Listed role requires title, listing URL and recent manual listing check; open inquiry does not claim a vacancy |
+| Research | Read company page and optionally a job page into excerpts | User can edit the excerpt and fact; source review expires after 30 days |
 | Personalization | Use one exact source fact and one user-entered fit statement | Missing/unsupported source fact blocks approval |
 | Draft | Short subject and plain-text body, fully editable | Subject, body, recipient and sender are visible before Gmail save |
 | Review | Warnings for generic/pressure language, placeholders and misleading subject prefixes | Critical issues block approval; warnings explain their limits |
@@ -24,7 +25,7 @@ As a student seeking a technical internship, I want to enter a company URL and H
 
 ## Core sequence
 
-`Lead input → URL excerpt → manual fact review → draft → writing review → approval → Gmail draft → manual send in Gmail`
+`Profile → choose listed role or open inquiry → company research → optional posting check → source fact review → draft → writing review → approval → Gmail draft → manual send in Gmail`
 
 ## Non-goals for this local release
 
@@ -32,7 +33,7 @@ Bulk sending, contact scraping, deliverability guarantees, automatic follow-ups,
 
 ## Technical design
 
-React/TypeScript/Vite frontend; local browser storage; small Node API bound to loopback. The server fetches one public HTML URL with size/time/redirect limits. Gmail OAuth uses a state value and PKCE, verifies the connected email, holds tokens in memory, and calls only `users.drafts.create`. PDF CV content is transmitted to Gmail only when the user explicitly clicks Save in Gmail Drafts. A Git-ignored local index records draft IDs and content fingerprints for repeat-request protection.
+React/TypeScript/Vite frontend; local browser storage; small Node API bound to loopback. Each analysis action fetches one public HTML URL with size/time/redirect limits. Company and job pages are separate actions; the selected fact is tied to one exact source URL and its saved excerpt. Gmail OAuth uses a state value and PKCE, verifies the connected email, holds tokens in memory, and calls only `users.drafts.create`. PDF CV content is transmitted to Gmail only when the user explicitly clicks Save in Gmail Drafts. A Git-ignored local index records draft IDs and content fingerprints for repeat-request protection.
 
 ## Quality evaluation
 
@@ -40,7 +41,7 @@ Test 20–30 permission-cleared or synthetic leads. For each draft, manually sco
 
 ## Local release status
 
-Lead input, single-page research, manual source review, deterministic drafting, writing checks, required PDF attachment, Gmail draft API integration, local backup/restore, and repeat-request protection are implemented. Automated tests, lint and production build pass. A live Gmail draft and real-lead copy evaluation are still pending because no OAuth client or first company lead has been supplied.
+Lead input, separate company and optional job-page research, open versus listed-role drafting, manual source and posting review, writing checks, required PDF attachment, Gmail draft API integration, local backup/restore, and repeat-request protection are implemented. Automated tests, lint and production build pass. A live Gmail draft and real-lead copy evaluation are still pending because no OAuth client or first company lead has been supplied.
 
 ## Next milestones
 

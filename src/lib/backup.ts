@@ -4,7 +4,9 @@ import type { AppData } from '../types';
 const short = z.string().max(2000);
 const date = short.refine((value) => Number.isFinite(new Date(value).getTime()));
 const companySchema = z.object({
-  id: short, name: short, website: short, role: short, contactName: short,
+  id: short, name: short, website: short, opportunityType: z.enum(['posted', 'open']).optional(), role: short,
+  postingUrl: short.optional(), postingText: z.string().max(25000).optional(), postingCheckedAt: date.optional(),
+  companySummary: z.string().max(25000).optional(), contactName: short,
   contactEmail: short, sourceUrl: short, sourceText: z.string().max(25000),
   selectedFact: short, subjectHook: short.optional(), sourceFetchedAt: date.optional(),
   sourceCheckedAt: date.optional(), matchingStrength: short,

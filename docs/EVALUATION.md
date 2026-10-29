@@ -9,6 +9,7 @@ Score each item from 0 (missing/incorrect) to 2 (clear and accurate):
 | Criterion | What to check |
 | --- | --- |
 | Company fact | The selected fact appears on the linked page and is still current |
+| Opportunity | A listed role is current, or the open inquiry avoids claiming a vacancy |
 | Relevance | The candidate's actual skill or project connects to that fact |
 | Subject | Short, specific, accurate and readable without opening the email |
 | Tone | Sounds like a person, avoids pressure and exaggerated promises |

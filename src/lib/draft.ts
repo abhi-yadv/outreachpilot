@@ -5,15 +5,24 @@ export function sourceSupportsFact(company: Company): boolean {
   return Boolean(fact && company.sourceText.toLowerCase().includes(fact));
 }
 
-export function sourceIsFresh(company: Company, now = Date.now()): boolean {
-  if (!company.sourceCheckedAt) return false;
-  const checked = new Date(company.sourceCheckedAt).getTime();
+function reviewedRecently(value: string | undefined, now: number): boolean {
+  if (!value) return false;
+  const checked = new Date(value).getTime();
   return Number.isFinite(checked) && checked <= now && now - checked <= 30 * 24 * 60 * 60 * 1000;
+}
+
+export function sourceIsFresh(company: Company, now = Date.now()): boolean {
+  return reviewedRecently(company.sourceCheckedAt, now);
+}
+
+export function postingIsFresh(company: Company, now = Date.now()): boolean {
+  return reviewedRecently(company.postingCheckedAt, now);
 }
 
 export function createGuidedDraft(profile: CandidateProfile, company: Company): Pick<Draft, 'subject' | 'body' | 'mode'> {
   const name = profile.name.trim() || '[your name]';
-  const role = company.role.trim() || 'technical internship';
+  const role = company.role.trim() || 'technical work';
+  const posted = company.opportunityType === 'posted';
   const fact = company.selectedFact.trim();
   const safeFact = sourceSupportsFact(company) ? fact : '';
   const intro = profile.education.trim() ? `I'm ${name}, a ${profile.education.trim()}.` : `I'm ${name}.`;
@@ -26,19 +35,21 @@ export function createGuidedDraft(profile: CandidateProfile, company: Company): 
         ? `${availabilityInput.replace(/[.]+$/, '')}.`
         : `My availability is ${availabilityInput.replace(/[.]+$/, '')}.`;
   const relevant = company.matchingStrength.trim() || profile.experience.trim();
-  const reason = safeFact
-    ? `One detail that caught my attention: ${safeFact.replace(/[.]+$/, '')}.`
-    : `I'm reaching out about the ${role} opportunity at ${company.name.trim()}.`;
+  const reason = posted
+    ? `I saw the ${role} posting at ${company.name.trim()} and would like to be considered.`
+    : `I'm reaching out about a possible internship in ${role} at ${company.name.trim()}.`;
   const work = relevant ? `${relevant.replace(/[.]+$/, '')}.` : '';
   const link = profile.github.trim() ? `\nGitHub: ${profile.github.trim()}` : '';
 
   return {
-    subject: company.subjectHook?.trim() ? `${company.subjectHook.trim()} at ${company.name.trim()}` : `${role} | ${company.name.trim()}`,
+    subject: posted
+      ? company.subjectHook?.trim() ? `${company.subjectHook.trim()} | ${role}` : `${role} | ${company.name.trim()}`
+      : company.subjectHook?.trim() ? `${company.subjectHook.trim()} | internship inquiry` : `Internship inquiry | ${company.name.trim()}`,
     body: [
       `Hi ${company.contactName.trim() || 'team'},`,
       `${intro} ${availability}`,
-      [reason, work].filter(Boolean).join(' '),
-      `Would your team be open to a brief conversation about how I could contribute?`,
+      [reason, safeFact, work].filter(Boolean).join(' '),
+      posted ? `If the role is still open, would you consider my application? I've attached my CV.` : `If your team considers interns for this work, I'd be glad to speak. I've attached my CV.`,
       `Thanks for your time,\n${profile.signoff.trim() || name}${link}`,
     ].filter(Boolean).join('\n\n'),
     mode: 'guided',
@@ -78,7 +89,8 @@ export function checkDraft(subject: string, body: string, company: Company): Che
   const combined = `${subject}\n${body}`;
   const lower = combined.toLowerCase();
   if (!subject.trim()) results.push({ id: 'subject', severity: 'critical', title: 'Subject is missing', detail: 'Add a short subject that accurately describes your outreach.' });
-  if (!company.subjectHook?.trim()) results.push({ id: 'subject-hook', severity: 'review', title: 'Make the subject specific', detail: 'Add a short subject hook from your verified company research, or edit the subject directly.' });
+  const fallbackSubject = company.opportunityType === 'posted' ? `${company.role.trim()} | ${company.name.trim()}` : `Internship inquiry | ${company.name.trim()}`;
+  if (!company.subjectHook?.trim() && subject.trim() === fallbackSubject) results.push({ id: 'subject-hook', severity: 'review', title: 'Make the subject specific', detail: 'Add a short subject angle from your verified research, or edit the subject directly.' });
   if (!body.trim()) results.push({ id: 'body', severity: 'critical', title: 'Email is empty', detail: 'Write or generate a message before review.' });
   if (company.id === 'sample-company') results.push({ id: 'sample-lead', severity: 'critical', title: 'Replace the sample lead', detail: 'Create a real company entry before approving a Gmail draft.' });
   if (/\bre\s*:|\bfwd\s*:/i.test(subject)) results.push({ id: 'thread', severity: 'critical', title: 'Misleading thread prefix', detail: 'Use Re: or Fwd: only for an actual existing conversation.' });
@@ -86,8 +98,17 @@ export function checkDraft(subject: string, body: string, company: Company): Che
   if (/\bgithub\.com\/example\b/i.test(body)) results.push({ id: 'sample-link', severity: 'critical', title: 'Replace the sample GitHub link', detail: 'Use your real portfolio URL or remove the link.' });
   if (company.name.trim() && !lower.includes(company.name.trim().toLowerCase())) results.push({ id: 'company', severity: 'critical', title: 'Company name missing', detail: 'Check that this draft is addressed to the right company.' });
   if (company.contactEmail.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(company.contactEmail.trim())) results.push({ id: 'email', severity: 'critical', title: 'Recipient email looks invalid', detail: 'Verify the address before saving a Gmail draft.' });
+  if (!company.website.trim()) results.push({ id: 'company-url', severity: 'critical', title: 'Company URL is missing', detail: 'Add the company website so your outreach is grounded in real company work.' });
+  if (!company.companySummary?.trim()) results.push({ id: 'company-research', severity: 'critical', title: 'Company research is missing', detail: 'Read the company website or enter a short factual description of its work.' });
+  if (!company.matchingStrength.trim()) results.push({ id: 'fit', severity: 'critical', title: 'Your connection to the work is missing', detail: 'Write one honest sentence linking your project or skill to this company or role.' });
+  if (company.opportunityType === 'posted') {
+    if (!company.postingUrl?.trim()) results.push({ id: 'posting-url', severity: 'critical', title: 'Job posting URL is missing', detail: 'Paste the exact listing for the role you selected.' });
+    else if (!/^https?:\/\/[^\s.]+\.[^\s]+$/i.test(company.postingUrl.trim())) results.push({ id: 'posting-url-invalid', severity: 'critical', title: 'Job posting URL looks invalid', detail: 'Use the full link to the role listing.' });
+    if (!company.postingText?.trim()) results.push({ id: 'posting-text', severity: 'critical', title: 'Job posting details are missing', detail: 'Read the listing or paste its relevant details.' });
+    if (!postingIsFresh(company)) results.push({ id: 'posting-review', severity: 'critical', title: 'Confirm the role is still open', detail: 'Open the job posting, check its status, then mark it reviewed. Review again after 30 days.' });
+  }
   if (!company.selectedFact.trim()) results.push({ id: 'missing-fact', severity: 'critical', title: 'Company detail is missing', detail: 'Select a specific sentence from company or role source material.' });
-  if (company.selectedFact.trim() && !company.sourceUrl.trim()) results.push({ id: 'missing-source', severity: 'critical', title: 'Source URL is missing', detail: 'Add the page URL so the company detail can be checked later.' });
+  if (company.selectedFact.trim() && !company.sourceUrl.trim()) results.push({ id: 'missing-source', severity: 'critical', title: 'Source URL is missing', detail: 'Open Evidence page details and add the exact page URL for your chosen fact.' });
   if (company.selectedFact.trim() && !sourceIsFresh(company)) results.push({ id: 'source-review', severity: 'critical', title: 'Review the source', detail: 'Open the source page, verify the fact, then mark it reviewed. Review again after 30 days.' });
   if (company.sourceUrl.trim() && !/^https?:\/\/[^\s.]+\.[^\s]+$/i.test(company.sourceUrl.trim())) results.push({ id: 'source-url', severity: 'critical', title: 'Source URL looks invalid', detail: 'Use a full http or https link to the company or role page.' });
   for (const phrase of pressureWords) {

@@ -26,7 +26,9 @@ const demoCompany: Company = {
   id: 'sample-company',
   name: 'Northstar Data',
   website: 'https://example.com',
-  role: 'Data Engineering Intern',
+  companySummary: 'Northstar Data builds data quality tools for analytics teams.',
+  opportunityType: 'open',
+  role: 'data engineering',
   contactName: 'Hiring team',
   contactEmail: '',
   sourceUrl: 'https://example.com/careers',
@@ -51,14 +53,15 @@ const STORAGE_KEY = 'outreachpilot:v1';
 export function loadData(): AppData {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return demoData();
+    if (!raw) return emptyData();
     const value: unknown = JSON.parse(raw);
-    if (!value || typeof value !== 'object') return demoData();
+    if (!value || typeof value !== 'object') return emptyData();
     const data = value as Partial<AppData>;
-    if (!data.profile || !Array.isArray(data.companies) || !Array.isArray(data.drafts)) return demoData();
+    if (!data.profile || !Array.isArray(data.companies) || !Array.isArray(data.drafts)) return emptyData();
+    if (data.profile.name === 'Alex Morgan' && data.profile.github === 'https://github.com/example' && data.companies.every((company) => company.id === 'sample-company')) return emptyData();
     return { profile: { ...blankProfile, ...data.profile }, companies: data.companies, drafts: data.drafts.map((draft) => draft.approved && !draft.approvedRecipient ? { ...draft, approved: false } : draft) };
   } catch {
-    return demoData();
+    return emptyData();
   }
 }
 

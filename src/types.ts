@@ -15,7 +15,12 @@ export interface Company {
   id: string;
   name: string;
   website: string;
+  opportunityType?: 'posted' | 'open';
   role: string;
+  postingUrl?: string;
+  postingText?: string;
+  postingCheckedAt?: string;
+  companySummary?: string;
   contactName: string;
   contactEmail: string;
   sourceUrl: string;

@@ -42,4 +42,20 @@ describe('source grounded drafting', () => {
     const draft = createGuidedDraft(profile, company);
     expect(checkDraft(draft.subject, draft.body, company).map((item) => item.id)).toContain('source-review');
   });
+
+  it('keeps an open inquiry distinct from a listed-role application', () => {
+    const realProfile = { ...profile, name: 'Sam Lee', github: '' };
+    const base = { ...company, id: 'real-lead', name: 'Northstar Data', contactEmail: 'hr@example.com', sourceCheckedAt: new Date().toISOString() };
+    const open = { ...base, opportunityType: 'open' as const, role: 'data engineering' };
+    const openDraft = createGuidedDraft(realProfile, open);
+    expect(openDraft.subject).toContain('internship inquiry');
+    expect(openDraft.body).toContain('possible internship in data engineering');
+    expect(openDraft.body).not.toContain('posting');
+
+    const posted = { ...base, opportunityType: 'posted' as const, role: 'Data Engineering Intern', postingUrl: 'https://example.com/jobs/data-intern', postingText: 'Data Engineering Intern role is open.', postingCheckedAt: new Date().toISOString() };
+    const postedDraft = createGuidedDraft(realProfile, posted);
+    expect(postedDraft.body).toContain('Data Engineering Intern posting');
+    expect(checkDraft(postedDraft.subject, postedDraft.body, posted).some((check) => check.id === 'posting-review')).toBe(false);
+    expect(checkDraft(postedDraft.subject, postedDraft.body, { ...posted, postingCheckedAt: undefined }).map((check) => check.id)).toContain('posting-review');
+  });
 });

@@ -1,18 +1,18 @@
 # OutreachPilot
 
-An internship outreach workspace for one carefully researched lead at a time. Enter the company URL and HR email, review a short excerpt from the website, select one relevant fact, and create a concise email using your verified profile. Approve the exact recipient and text, then save it to Gmail **Drafts**. OutreachPilot has no send endpoint. You send manually in Gmail whenever you choose.
+An internship outreach workspace for one carefully researched lead at a time. Enter a company URL, review a short excerpt from the website, select one relevant fact, and create a concise email using your verified profile. You can save the draft locally without an application email. Once you have a verified recipient, approve the exact address and text, then save it to Gmail **Drafts**. OutreachPilot has no send endpoint. You send manually in Gmail whenever you choose.
 
 This is a local-first prototype. The app uses a deterministic template and editable review; it does not call an AI model to write the email. The writing checker flags generic phrases, pressure words, missing evidence, placeholders and misleading subjects. It cannot guarantee inbox placement.
 
 ## Workflow
 
-1. Edit **Candidate profile** with your real name, education and experience. A new workspace starts empty; a synthetic demo can be loaded separately.
+1. Edit **Candidate profile** with your real name, education and experience. Skills and project title are reference notes; the generator does not automatically put the whole list into every email. Add a relevant example in **Your connection to their work** for each company. A new workspace starts empty; a synthetic demo can be loaded separately.
 2. Choose **New company**, then pick **Apply to a listed role** or **Open internship inquiry**. A listed role needs its exact title and job posting URL. An open inquiry asks about possible internships and makes no vacancy claim.
-3. Enter the company name, main website and HR email you already have. Click **Read company website** to see what it does. For a listed role, click **Read job posting** as well and confirm the listing is still current.
+3. Enter the company name and main website. Add an application email if you have verified one; it is optional while researching and saving local drafts. Click **Read company website** to see what it does. For a listed role, click **Read job posting** as well and confirm the listing is still current.
 4. Select one fact from the company or job page. The app fills the source URL and evidence text automatically; open the original page, correct anything inaccurate, and click **I reviewed the source**. Reviews expire after 30 days or when their page or fact changes.
 5. Write one honest sentence connecting your experience to the company's work. Create and edit the short draft.
 6. Fix red writing checks before approval. Amber checks are suggestions to review yourself. Neither predicts spam placement.
-7. Connect the intended Gmail account, attach a PDF CV, and click **Save in Gmail Drafts**. Open Gmail to send manually later.
+7. If you do not have a recipient, save the draft locally and use the company's official careers page, job listing or contact page to find an application route. Do not guess an email address. Once you have a verified email, connect the intended Gmail account, attach a PDF CV, and click **Save in Gmail Drafts**. Open Gmail to send manually later.
 
 **URL glossary:** The *company URL* is its main website, such as `https://company.com`. A *job posting URL* is a live listing for the exact role, if one exists. The *source URL* is the exact page supporting the fact in your email; it may be the company site or job listing. The app fills the source URL when it reads a page. You only enter it yourself if automatic reading fails or you choose a different evidence page.
 

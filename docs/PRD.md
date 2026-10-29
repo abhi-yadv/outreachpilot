@@ -2,23 +2,23 @@
 
 ## Objective
 
-For each lead supplied by the user (company URL plus HR email), produce one researched, concise internship outreach email and save the approved message as an unsent Gmail draft. The user decides when to send it from Gmail.
+For each lead supplied by the user, produce one researched, concise internship outreach email. The company URL is enough to start; an application email is required only to save the approved message as an unsent Gmail draft. The user decides when to send it from Gmail.
 
 ## User story
 
-As a student seeking a technical internship, I want to enter a company URL and HR email, see a useful summary of what that company actually does, connect one of its relevant facts to my verified experience, edit a professional email, and save it to my own Gmail Drafts without automatic sending.
+As a student seeking a technical internship, I want to enter a company URL, see a useful summary of what that company actually does, connect one of its relevant facts to my verified experience, and save an editable local draft even when I do not yet have an application email. Once I have a verified address, I can save the approved email to my own Gmail Drafts without automatic sending.
 
 ## Functional requirements
 
 | Area | Requirement | Acceptance |
 | --- | --- | --- |
-| Lead | Company name, main URL, HR email, optional name | No email address is guessed; invalid addresses are flagged |
+| Lead | Company name, main URL, optional application email and contact name | No email address is guessed; invalid addresses are flagged; missing address does not block local research or drafting |
 | Opportunity | Listed role or open internship inquiry | Listed role requires title, listing URL and recent manual listing check; open inquiry does not claim a vacancy |
 | Research | Read company page and optionally a job page into excerpts | User can edit the excerpt and fact; source review expires after 30 days |
 | Personalization | Use one exact source fact and one user-entered fit statement | Missing/unsupported source fact blocks approval |
 | Draft | Short subject and plain-text body, fully editable | Subject, body, recipient and sender are visible before Gmail save |
 | Review | Warnings for generic/pressure language, placeholders and misleading subject prefixes | Critical issues block approval; warnings explain their limits |
-| Gmail | OAuth connection to the expected account and required PDF CV | `drafts.create` saves an unsent draft; no send endpoint exists |
+| Gmail | Verified recipient, OAuth connection to the expected account and required PDF CV | `drafts.create` saves an unsent draft; no send endpoint exists |
 | Tracker | Researching, Drafted, Reviewed, Sent, Replied | User changes status manually; app never infers sent state |
 | Backup | Download and restore a versioned local workspace file | Restore requires an explicit second click after record counts are shown |
 | Duplicate guard | Reuse an identical Gmail draft request | Index survives a local server restart; uncertain failures require a Gmail check |
@@ -41,7 +41,7 @@ Test 20–30 permission-cleared or synthetic leads. For each draft, manually sco
 
 ## Local release status
 
-Lead input, separate company and optional job-page research, open versus listed-role drafting, manual source and posting review, writing checks, required PDF attachment, Gmail draft API integration, local backup/restore, and repeat-request protection are implemented. Automated tests, lint and production build pass. A live Gmail draft and real-lead copy evaluation are still pending because no OAuth client or first company lead has been supplied.
+Lead input, separate company and optional job-page research, open versus listed-role drafting, manual source and posting review, writing checks, required PDF attachment, Gmail draft API integration, local backup/restore, and repeat-request protection are implemented. A real Outcom.AI lead was researched and its local draft reviewed; that test exposed awkward copied source wording, which was corrected in the template. A live Gmail draft remains untested because no OAuth client is configured.
 
 ## Next milestones
 

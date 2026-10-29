@@ -10,7 +10,13 @@ describe('local backup', () => {
 
   it('keeps listed-role evidence in a backup', () => {
     const data = demoData();
-    data.companies[0] = { ...data.companies[0], opportunityType: 'posted', postingUrl: 'https://example.com/jobs/intern', postingText: 'Data Engineering Intern listing', postingCheckedAt: new Date().toISOString() };
+    data.companies[0] = {
+      ...data.companies[0],
+      opportunityType: 'posted',
+      postingUrl: 'https://example.com/jobs/intern',
+      postingText: 'Data Engineering Intern listing',
+      postingCheckedAt: new Date().toISOString(),
+    };
     expect(parseBackup(exportBackup(data)).companies[0]).toEqual(data.companies[0]);
   });
 

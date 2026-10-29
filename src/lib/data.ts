@@ -32,10 +32,12 @@ const demoCompany: Company = {
   contactName: 'Hiring team',
   contactEmail: '',
   sourceUrl: 'https://example.com/careers',
-  sourceText: 'Northstar Data builds data quality tools for analytics teams. The Data Engineering Intern works on data validation and Python workflows.',
+  sourceText:
+    'Northstar Data builds data quality tools for analytics teams. The Data Engineering Intern works on data validation and Python workflows.',
   selectedFact: 'Northstar Data builds data quality tools for analytics teams.',
   subjectHook: 'Data quality work',
-  matchingStrength: 'My data quality dashboard and Python experience connect to your data validation work.',
+  matchingStrength:
+    'My data quality dashboard and Python experience connect to your data validation work.',
   status: 'Researching',
   updatedAt: new Date().toISOString(),
 };
@@ -57,9 +59,21 @@ export function loadData(): AppData {
     const value: unknown = JSON.parse(raw);
     if (!value || typeof value !== 'object') return emptyData();
     const data = value as Partial<AppData>;
-    if (!data.profile || !Array.isArray(data.companies) || !Array.isArray(data.drafts)) return emptyData();
-    if (data.profile.name === 'Alex Morgan' && data.profile.github === 'https://github.com/example' && data.companies.every((company) => company.id === 'sample-company')) return emptyData();
-    return { profile: { ...blankProfile, ...data.profile }, companies: data.companies, drafts: data.drafts.map((draft) => draft.approved && !draft.approvedRecipient ? { ...draft, approved: false } : draft) };
+    if (!data.profile || !Array.isArray(data.companies) || !Array.isArray(data.drafts))
+      return emptyData();
+    if (
+      data.profile.name === 'Alex Morgan' &&
+      data.profile.github === 'https://github.com/example' &&
+      data.companies.every((company) => company.id === 'sample-company')
+    )
+      return emptyData();
+    return {
+      profile: { ...blankProfile, ...data.profile },
+      companies: data.companies,
+      drafts: data.drafts.map((draft) =>
+        draft.approved && !draft.approvedRecipient ? { ...draft, approved: false } : draft,
+      ),
+    };
   } catch {
     return emptyData();
   }

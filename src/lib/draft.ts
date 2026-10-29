@@ -39,6 +39,7 @@ export function createGuidedDraft(profile: CandidateProfile, company: Company): 
     ? `I saw the ${role} posting at ${company.name.trim()} and would like to be considered.`
     : `I'm reaching out about a possible internship in ${role} at ${company.name.trim()}.`;
   const work = relevant ? `${relevant.replace(/[.]+$/, '')}.` : '';
+  const quotedFact = safeFact ? `${posted ? 'Your role page' : 'Your website'} mentions “${safeFact.replace(/[.]+$/, '')}”.` : '';
   const link = profile.github.trim() ? `\nGitHub: ${profile.github.trim()}` : '';
 
   return {
@@ -48,7 +49,7 @@ export function createGuidedDraft(profile: CandidateProfile, company: Company): 
     body: [
       `Hi ${company.contactName.trim() || 'team'},`,
       `${intro} ${availability}`,
-      [reason, safeFact, work].filter(Boolean).join(' '),
+      [reason, quotedFact, work].filter(Boolean).join(' '),
       posted ? `If the role is still open, would you consider my application? I've attached my CV.` : `If your team considers interns for this work, I'd be glad to speak. I've attached my CV.`,
       `Thanks for your time,\n${profile.signoff.trim() || name}${link}`,
     ].filter(Boolean).join('\n\n'),

@@ -80,7 +80,7 @@ function App() {
     if (!sourceIsFresh(companyForm)) return 'Choose one fact from the company or role page and mark its source reviewed.';
     if (opportunityType === 'posted' && !postingIsFresh(companyForm)) return 'Check that the listed role is still open and mark its posting reviewed.';
     if (!activeDraft) return 'Create a draft, then edit its subject and message.';
-    if (!activeDraft.approved) return 'Resolve the red review items and approve the draft.';
+    if (!activeDraft.approved) return criticalCount ? 'Resolve the red review items before approving the draft.' : 'Review the draft and recipient, then approve it when ready.';
     return activeDraft.gmailDraftId ? 'Draft saved in Gmail. You choose when to send it.' : 'Attach your CV and save the approved message in Gmail Drafts.';
   })();
 

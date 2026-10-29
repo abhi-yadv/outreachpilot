@@ -15,6 +15,12 @@ describe('source grounded drafting', () => {
     expect(createGuidedDraft(profile, unsupported).body).not.toContain('global award');
   });
 
+  it('attributes a sourced fragment instead of pasting it as a broken sentence', () => {
+    const fragment = { ...company, selectedFact: 'data quality tools for analytics teams' };
+    const draft = createGuidedDraft(profile, fragment);
+    expect(draft.body).toContain('Your website mentions “data quality tools for analytics teams”.');
+  });
+
   it('flags unsupported facts and misleading subject lines', () => {
     const unsupported = { ...company, selectedFact: 'Northstar Data won a global award.' };
     const checks = checkDraft('Re: urgent offer', 'Hi team, I have always admired your company!', unsupported);
